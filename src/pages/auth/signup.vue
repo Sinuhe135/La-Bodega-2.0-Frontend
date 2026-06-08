@@ -1,8 +1,44 @@
 <script setup lang="ts">
+import { signupApi } from '/@src/repositories/auth.repository'
+import { encrypt, decrypt } from '/@src/utils/encryption'
+
+const isLoading = ref(false)
 const router = useRouter()
+const route = useRoute()
+const token = useUserToken()
 
 const handleSignup = async () => {
-  router.push('/auth')
+  await encryptionTest()
+}
+
+const encryptionTest = async () => {
+  const secretKey = generateKey()
+  console.log('Secret Key:', secretKey)
+  const original = 'Hello from La Bodega!'
+
+  const encrypted = await encrypt(original, secretKey)
+  console.log('Encrypted:', encrypted)
+
+  const decrypted = await decrypt(encrypted, secretKey)
+  console.log('Decrypted:', decrypted)
+  console.log('Match:', original === decrypted)
+}
+
+const signup = async () => {
+  try {
+    const loginResponse = await signupApi('', '');
+    token.value = loginResponse.jwt;
+  } catch (error) {
+    console.error('Signup failed:', error)
+    return
+  }
+  
+  if (typeof route?.query?.redirect === 'string') {
+    router.push(route.query.redirect)
+  }
+  else {
+    router.push('/app')
+  }
 }
 
 useHead({

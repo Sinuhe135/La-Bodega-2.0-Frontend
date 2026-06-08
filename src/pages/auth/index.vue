@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { login } from '/@src/repositories/auth.repository'
+import { loginApi } from '/@src/repositories/auth.repository'
 
 const isLoading = ref(false)
 const router = useRouter()
@@ -9,7 +9,7 @@ const token = useUserToken()
 const handleLogin = async () => {
 
   try {
-    const loginResponse = await login('', '');
+    const loginResponse = await loginApi('', '');
     token.value = loginResponse.jwt;
   } catch (error) {
     console.error('Login failed:', error)

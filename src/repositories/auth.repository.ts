@@ -2,7 +2,7 @@ import { LoginDto } from "../dtos/auth/login.dto";
 import { LoginResponseDto } from "../dtos/auth/login_response.dto";
 import { apiClient } from "./client";
 
-export async function login(username: string, keyHash: string) : Promise<LoginResponseDto> {
+export async function loginApi(username: string, keyHash: string) : Promise<LoginResponseDto> {
     const loginDto : LoginDto = {
         username: username,
         keyHash: keyHash
@@ -15,7 +15,7 @@ export async function login(username: string, keyHash: string) : Promise<LoginRe
     }
 }
 
-export async function signup(username: string, keyHash: string) : Promise<LoginResponseDto> {
+export async function signupApi(username: string, keyHash: string) : Promise<LoginResponseDto> {
     const loginDto : LoginDto = {
         username: username,
         keyHash: keyHash

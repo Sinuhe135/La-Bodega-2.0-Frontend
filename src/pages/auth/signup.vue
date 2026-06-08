@@ -11,10 +11,19 @@ const handleSignup = async () => {
   await encryptionTest()
 }
 
+/*
+apply changes to the db schema
+implement the database call with file download
+*/
+
 const encryptionTest = async () => {
+  const original = 'Hello from La Bodega!'
+
   const secretKey = generateKey()
   console.log('Secret Key:', secretKey)
-  const original = 'Hello from La Bodega!'
+
+  const hash = await hashKey(secretKey)
+  console.log('Hashed Key (Base64):', hash)
 
   const encrypted = await encrypt(original, secretKey)
   console.log('Encrypted:', encrypted)

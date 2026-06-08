@@ -1,11 +1,20 @@
 <script setup lang="ts">
+import { login } from '/@src/repositories/auth.repository'
+
 const isLoading = ref(false)
 const router = useRouter()
 const route = useRoute()
 const token = useUserToken()
 
 const handleLogin = async () => {
-  token.value = 'logged-in'
+
+  try {
+    const loginResponse = await login('', '');
+    token.value = loginResponse.jwt;
+  } catch (error) {
+    console.error('Login failed:', error)
+    return
+  }
 
   if (typeof route?.query?.redirect === 'string') {
     router.push(route.query.redirect)

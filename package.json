@@ -26,6 +26,7 @@
     "@unhead/vue": "1.9.9",
     "@vueuse/core": "10.9.0",
     "@vueuse/router": "10.9.0",
+    "axios": "^1.17.0",
     "bulma": "npm:@cssninja/bulma@0.9.4",
     "cross-env": "7.0.3",
     "defu": "6.1.4",

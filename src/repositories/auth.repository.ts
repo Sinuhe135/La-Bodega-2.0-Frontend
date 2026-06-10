@@ -1,3 +1,4 @@
+import { CurrentUserResponseDto } from "../dtos/auth/current_user_response.dto";
 import { LoginDto } from "../dtos/auth/login.dto";
 import { LoginResponseDto } from "../dtos/auth/login_response.dto";
 import { apiClient } from "./client";
@@ -25,5 +26,20 @@ export async function signupApi(username: string, keyHash: string) : Promise<Log
 
     return {
         jwt: response.data.jwt,
+    }
+}
+
+export async function getCurrentUserApi() : Promise<CurrentUserResponseDto> {
+    const token = useUserToken().value
+
+    const response = await apiClient.get('/auth/current', {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
+
+    return {
+        id: response.data.id,
+        username: response.data.username,
     }
 }

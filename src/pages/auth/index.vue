@@ -6,15 +6,38 @@ const router = useRouter()
 const route = useRoute()
 const token = useUserToken()
 
+const username = ref('')
+const keyFile = ref<FileList | null>(null)
+
+const errorMessage = ref('')
+
+const handleFileChange = (event: Event) => {
+  keyFile.value = (event.target as HTMLInputElement).files
+}
+
 const handleLogin = async () => {
+  errorMessage.value = ''
+
+  if(username.value === '' || !username.value || !keyFile.value || keyFile.value.length === 0)
+  {
+    return;
+  }
+
+  isLoading.value = true
 
   try {
-    const loginResponse = await loginApi('', '');
+    const file = await uploadKey(keyFile.value)
+    const hash = await hashKey(file)
+
+    const loginResponse = await loginApi(username.value, hash);
     token.value = loginResponse.jwt;
   } catch (error) {
-    console.error('Login failed:', error)
+    errorMessage.value = handleAxiosError(error, 'Login failed. Please check your credentials and try again.')
+    isLoading.value = false;
     return
   }
+
+  isLoading.value = false;
 
   if (typeof route?.query?.redirect === 'string') {
     router.push(route.query.redirect)
@@ -50,8 +73,8 @@ useHead({
     <div class="single-form-wrap is-relative">
       <div class="inner-wrap">
         <div class="auth-head">
-          <h2>Welcome Back.</h2>
-          <p>Please sign in to your account</p>
+          <h2>Welcome Back</h2>
+          <p>Please enter your username and select your key file</p>
           <RouterLink to="/auth/signup">
             I do not have an account yet
           </RouterLink>
@@ -65,31 +88,21 @@ useHead({
           >
             <div class="login-form">
               <VField>
-                <VControl icon="lucide:user">
+                <VControl icon="lucide:user" :loading="isLoading">
                   <VInput
                     type="text"
                     placeholder="Username"
                     autocomplete="username"
+                    v-model="username"
                   />
                 </VControl>
               </VField>
               <VField>
-                <VControl icon="lucide:lock">
+                <VControl icon="lucide:lock" :loading="isLoading">
                   <VInput
-                    type="password"
-                    placeholder="Password"
-                    autocomplete="current-password"
-                  />
-                </VControl>
-              </VField>
-
-              <!-- Switch -->
-              <VField>
-                <VControl class="setting-item">
-                  <VCheckbox
-                    label="Remember me"
-                    color="primary"
-                    paddingless
+                    type="file"
+                    placeholder="Key file"
+                    @change="handleFileChange"
                   />
                 </VControl>
               </VField>
@@ -109,12 +122,20 @@ useHead({
               </div>
             </div>
           </form>
+          <p v-if="errorMessage !== ''" class="error-message">
+            {{ errorMessage }}
+          </p>
         </div>
 
-        <div class="forgot-link has-text-centered">
-          <a>Forgot Password?</a>
-        </div>
       </div>
     </div>
   </div>
 </template>
+
+<style lang="scss" scoped>
+.error-message{
+  color: var(--danger);
+  margin-top: 1rem;
+  text-align: center;
+  }
+</style>

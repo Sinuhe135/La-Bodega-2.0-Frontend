@@ -39,12 +39,18 @@ export function downloadKey(key: Uint8Array<ArrayBuffer>, filename = 'encryption
     URL.revokeObjectURL(url);
 }
 
-export function uploadKey(file: File): Promise<Uint8Array<ArrayBuffer>> {
+export function uploadKey(file: FileList | File | null): Promise<Uint8Array<ArrayBuffer>> {
     return new Promise((resolve, reject) => {
+        const target = file instanceof FileList ? file.item(0) : file;
+        if (!target) {
+            reject(new Error('No key file selected'));
+            return;
+        }
+
         const reader = new FileReader();
         reader.onload = () => resolve(fromBase64((reader.result as string).trim()));
         reader.onerror = () => reject(new Error('Failed to read key file'));
-        reader.readAsText(file);
+        reader.readAsText(target);
     });
 }
 

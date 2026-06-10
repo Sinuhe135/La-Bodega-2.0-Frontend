@@ -4,14 +4,14 @@ import type {
 } from '/@src/components/layouts/landing/landing.types'
 
 const links = ref<LandingNavItem[]>([
-  {
-    label: 'Home',
-    to: '/',
-  },
-  {
-    label: 'App',
-    to: '/app',
-  },
+  // {
+  //   label: 'Home',
+  //   to: '/',
+  // },
+  // {
+  //   label: 'App',
+  //   to: '/app',
+  // },
 ])
 </script>
 

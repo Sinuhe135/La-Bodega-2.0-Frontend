@@ -14,13 +14,12 @@ useHead({
           <div class="columns is-vcentered has-text-centered">
             <div class="column">
               <h1 class="title is-1 is-bold">
-                Easier development. Beautiful projects
+                La Bodega
               </h1>
               <h3 class="subtitle is-4 pt-2 light-text">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Isto modo ne
-                improbos quidem.
+                The password manager app where only you have access to your data, not even us.
               </h3>
-              <div class="buttons is-centered">
+              <!-- <div class="buttons is-centered">
                 <VButton
                   color="primary"
                   bold
@@ -38,8 +37,8 @@ useHead({
                 >
                   14-day Trial
                 </VButton>
-              </div>
-              <div class="hero-mockup">
+              </div> -->
+              <!-- <div class="hero-mockup">
                 <img
                   class="light-image-block"
                   src="https://media.cssninja.io/content/products/screenshots/vuero/11.png"
@@ -50,7 +49,7 @@ useHead({
                   src="https://media.cssninja.io/content/products/screenshots/vuero/12.png"
                   alt=""
                 >
-              </div>
+              </div> -->
             </div>
           </div>
         </div>

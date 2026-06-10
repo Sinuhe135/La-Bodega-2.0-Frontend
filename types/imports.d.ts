@@ -52,6 +52,8 @@ declare global {
   const getCurrentInstance: typeof import('vue')['getCurrentInstance']
   const getCurrentScope: typeof import('vue')['getCurrentScope']
   const h: typeof import('vue')['h']
+  const handleAxiosError: typeof import('../src/utils/error.utils')['handleAxiosError']
+  const handleError: typeof import('../src/utils/error.utils')['handleError']
   const hashKey: typeof import('../src/utils/encryption')['hashKey']
   const ignorableWatch: typeof import('@vueuse/core')['ignorableWatch']
   const inject: typeof import('vue')['inject']

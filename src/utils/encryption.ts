@@ -11,12 +11,12 @@ async function importKey(key: Uint8Array<ArrayBuffer>): Promise<CryptoKey> {
     );
 }
 
-function toBase64(buffer: ArrayBuffer | Uint8Array): string {
+export function toBase64(buffer: ArrayBuffer | Uint8Array): string {
     const bytes = buffer instanceof Uint8Array ? buffer : new Uint8Array(buffer);
     return btoa(String.fromCharCode(...bytes));
 }
 
-function fromBase64(b64: string): Uint8Array<ArrayBuffer> {
+export function fromBase64(b64: string): Uint8Array<ArrayBuffer> {
     return new Uint8Array(Array.from(atob(b64), c => c.charCodeAt(0)));
 }
 

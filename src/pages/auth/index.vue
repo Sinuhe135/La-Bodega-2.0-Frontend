@@ -4,7 +4,6 @@ import { getCurrentUserApi, loginApi } from '/@src/repositories/auth.repository'
 const isLoading = ref(false)
 const router = useRouter()
 const route = useRoute()
-const token = useUserToken()
 const userSession = useUserSession()
 
 const username = ref('')
@@ -27,15 +26,16 @@ const handleLogin = async () => {
   isLoading.value = true
 
   try {
-    const file = await uploadKey(keyFile.value)
-    const hash = await hashKey(file)
+    const key = await uploadKey(keyFile.value)
+    const hash = await hashKey(key)
 
     const loginResponse = await loginApi(username.value, hash);
-    token.value = loginResponse.jwt;
-    console.log('Login successful, JWT token:', loginResponse.jwt);
+    userSession.setToken(loginResponse.jwt);
+    userSession.setCryptKey(key);
 
-    const currentUser = await getCurrentUserApi(token.value);
+    const currentUser = await getCurrentUserApi(loginResponse.jwt);
     userSession.setUser(currentUser);
+    
   } catch (error) {
     errorMessage.value = handleAxiosError(error, 'Login failed. Please check your credentials and try again.')
     isLoading.value = false;

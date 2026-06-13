@@ -31,7 +31,6 @@ export async function signupApi(username: string, keyHash: string) : Promise<Log
 
 export async function getCurrentUserApi(token:string | null) : Promise<CurrentUserResponseDto> {
     // const token = useUserToken().value
-    console.log('Getting current user with token:', token)
 
     const response = await apiClient.get('/auth/current', {
         headers: {

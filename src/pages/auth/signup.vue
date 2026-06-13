@@ -6,7 +6,6 @@ import { encrypt, decrypt } from '/@src/utils/encryption'
 const isLoading = ref(false)
 const router = useRouter()
 const route = useRoute()
-const token = useUserToken()
 const userSession = useUserSession()
 
 const username = ref('')
@@ -43,9 +42,10 @@ const signup = async ()=>{
     const loginResponse = await signupApi(username.value, hash);
 
     downloadKey(secretKey, `${username.value}.key`)
-    token.value = loginResponse.jwt;
+    userSession.setToken(loginResponse.jwt);
+    userSession.setCryptKey(secretKey);
 
-    const currentUser = await getCurrentUserApi(token.value);
+    const currentUser = await getCurrentUserApi(loginResponse.jwt);
     userSession.setUser(currentUser);
   } catch (error) {
     errorMessage.value = handleAxiosError(error, 'Signup failed. Please try again.')

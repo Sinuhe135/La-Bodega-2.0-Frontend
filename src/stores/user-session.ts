@@ -13,9 +13,21 @@ export const useUserSession = defineStore('userSession', () => {
     user.value = newUser
   }
 
+  function setToken(token: string) {
+    const userToken = useUserToken()
+    userToken.value = token
+  }
+
+  function setCryptKey(cryptKey: Uint8Array<ArrayBuffer>) {
+    const userCryptKey = useUserCryptKey()
+    userCryptKey.value = cryptKey
+  }
+
   async function logoutUser() {
     const token = useUserToken()
+    const cryptKey = useUserCryptKey()
     token.value = undefined
+    cryptKey.value = undefined
     user.value = undefined
   }
 
@@ -24,6 +36,8 @@ export const useUserSession = defineStore('userSession', () => {
     isLoggedIn,
     logoutUser,
     setUser,
+    setToken,
+    setCryptKey,
   } as const
 })
 

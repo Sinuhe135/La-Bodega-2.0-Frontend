@@ -1,14 +1,15 @@
 import { acceptHMRUpdate, defineStore } from 'pinia'
 import { ref, computed } from 'vue'
+import { CurrentUserResponseDto } from '../dtos/auth/current_user_response.dto'
 
 export type UserData = Record<string, any>
 
 export const useUserSession = defineStore('userSession', () => {
-  const user = ref<Partial<UserData>>()
+  const user = ref<CurrentUserResponseDto>()
 
   const isLoggedIn = computed(() => user.value !== undefined)
 
-  function setUser(newUser: Partial<UserData>) {
+  function setUser(newUser: CurrentUserResponseDto) {
     user.value = newUser
   }
 

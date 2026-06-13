@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { loginApi } from '/@src/repositories/auth.repository'
+import { getCurrentUserApi, loginApi } from '/@src/repositories/auth.repository'
 
 const isLoading = ref(false)
 const router = useRouter()
 const route = useRoute()
 const token = useUserToken()
+const userSession = useUserSession()
 
 const username = ref('')
 const keyFile = ref<FileList | null>(null)
@@ -31,6 +32,10 @@ const handleLogin = async () => {
 
     const loginResponse = await loginApi(username.value, hash);
     token.value = loginResponse.jwt;
+    console.log('Login successful, JWT token:', loginResponse.jwt);
+
+    const currentUser = await getCurrentUserApi(token.value);
+    userSession.setUser(currentUser);
   } catch (error) {
     errorMessage.value = handleAxiosError(error, 'Login failed. Please check your credentials and try again.')
     isLoading.value = false;

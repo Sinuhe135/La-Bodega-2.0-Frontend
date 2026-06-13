@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import { AxiosError } from 'axios'
-import { signupApi } from '/@src/repositories/auth.repository'
+import { getCurrentUserApi, signupApi } from '/@src/repositories/auth.repository'
 import { encrypt, decrypt } from '/@src/utils/encryption'
 
 const isLoading = ref(false)
 const router = useRouter()
 const route = useRoute()
 const token = useUserToken()
+const userSession = useUserSession()
 
 const username = ref('')
 const errorMessage = ref('')
@@ -43,6 +44,9 @@ const signup = async ()=>{
 
     downloadKey(secretKey, `${username.value}.key`)
     token.value = loginResponse.jwt;
+
+    const currentUser = await getCurrentUserApi(token.value);
+    userSession.setUser(currentUser);
   } catch (error) {
     errorMessage.value = handleAxiosError(error, 'Signup failed. Please try again.')
     isLoading.value = false;
@@ -97,7 +101,8 @@ useHead({
     @close="showKeyModal = false"
   >
     <template #content>
-      <p>A key will be downloaded after signup</p>
+      <p>A key will be downloaded to your device</p>
+      <br/>
       <p>The key is used to access to your account and your data</p>
       <br/>
       <p>If you lose your key, it cannot be recovered</p>

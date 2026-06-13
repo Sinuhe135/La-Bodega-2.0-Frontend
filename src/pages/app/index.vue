@@ -13,13 +13,14 @@ const isLogOutLoading = ref(false)
 const username = ref('')
 
 onMounted(() => {
-  onPageLoad()
+  username.value = userSessionStore.user?.username || ''
+  // onPageLoad()
 })
 
-const onPageLoad = async () => {
-  const userData = await getCurrentUserApi();
-  username.value = userData.username;
-}
+// const onPageLoad = async () => {
+//   const userData = await getCurrentUserApi();
+//   username.value = userData.username;
+// }
 
 
 const logout = async () =>{

@@ -1,4 +1,5 @@
 import { definePlugin } from '/@src/utils/plugins'
+import { getCurrentUserApi } from '/@src/repositories/auth.repository'
 
 export default definePlugin(async ({ router, pinia }) => {
   const userSession = useUserSession(pinia)
@@ -6,11 +7,8 @@ export default definePlugin(async ({ router, pinia }) => {
 
   if (token.value && !userSession.user) {
     try {
-      userSession.setUser({
-        id: 1,
-        name: 'John Doe',
-        email: '',
-      })
+      const currentUser = await getCurrentUserApi(token.value)
+      userSession.setUser(currentUser)
     }
     catch (err) {
       token.value = undefined

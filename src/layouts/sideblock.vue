@@ -4,8 +4,8 @@ import type { SideblockItem } from '/@src/components/layouts/sideblock/sideblock
 const links = ref<SideblockItem[]>([
   {
     type: 'link',
-    label: 'Dashboard',
-    icon: 'lucide:grid',
+    label: 'Accounts',
+    icon: 'material-symbols:account-circle',
     to: '/app',
   },
 ])
@@ -21,7 +21,7 @@ const links = ref<SideblockItem[]>([
 
     <template #logo>
       <h3 class="is-hidden-mobile ml-2">
-        My app
+        La Bodega
       </h3>
     </template>
 
@@ -30,5 +30,19 @@ const links = ref<SideblockItem[]>([
         <VDarkmodeToggle />
       </div>
     </template>
+
+    <template #sideblock-end>
+      <div class ="logout-button-container">
+        <LogoutButton />
+      </div>
+    </template>
   </SideblockLayout>
 </template>
+
+<style lang="scss" scoped>
+.logout-button-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+</style>

@@ -13,6 +13,7 @@ declare module 'vue' {
     LandingGrids: typeof import('./../src/components/layouts/landing/LandingGrids.vue')['default']
     LandingLayout: typeof import('./../src/components/layouts/landing/LandingLayout.vue')['default']
     LandingNavigation: typeof import('./../src/components/layouts/landing/LandingNavigation.vue')['default']
+    LogoutButton: typeof import('./../src/components/LogoutButton.vue')['default']
     MinimalLayout: typeof import('./../src/components/layouts/minimal/MinimalLayout.vue')['default']
     MobileBurger: typeof import('./../src/components/layouts/shared/mobile/MobileBurger.vue')['default']
     MobileNavbar: typeof import('./../src/components/layouts/shared/mobile/MobileNavbar.vue')['default']

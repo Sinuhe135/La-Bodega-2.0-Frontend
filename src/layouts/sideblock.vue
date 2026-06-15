@@ -42,6 +42,12 @@ const links = ref<SideblockItem[]>([
         <LogoutButton />
       </div>
     </template>
+    
+    <template #toolbar-mobile>
+      <div class ="logout-button-container-mobile">
+        <LogoutButton onlyIcon /> 
+      </div>
+    </template>
   </SideblockLayout>
 </template>
 
@@ -50,5 +56,10 @@ const links = ref<SideblockItem[]>([
   width: 100%;
   display: flex;
   justify-content: center;
+}
+.logout-button-container-mobile {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
 }
 </style>

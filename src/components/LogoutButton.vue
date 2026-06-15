@@ -1,4 +1,9 @@
 <script setup lang="ts">
+
+const props = defineProps<{
+  onlyIcon?: boolean
+}>()
+
 const router = useRouter()
 const userSessionStore = useUserSession()
 
@@ -14,7 +19,8 @@ const logout = async () => {
 </script>
 
 <template>
-  <VButton @click="logout" color="warning" :loading="isLogOutLoading" icon="material-symbols:logout">
+  <VIconButton @click="logout" color="warning" outlined :loading="isLogOutLoading" icon="material-symbols:logout" v-if="props.onlyIcon" />
+  <VButton @click="logout" color="warning" :loading="isLogOutLoading" icon="material-symbols:logout" v-else>
     Log out
   </VButton>
 </template>

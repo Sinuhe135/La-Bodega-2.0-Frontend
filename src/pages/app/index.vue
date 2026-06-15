@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { getAllCategoriesApi } from '/@src/repositories/category.repository'
+
 
 const pageTitle = useVueroContext<string>('page-title')
 onMounted(() => {
@@ -10,15 +12,20 @@ const username = ref('')
 
 onMounted(() => {
   username.value = userSessionStore.user?.username || ''
-  // onPageLoad()
+  onPageLoad()
 })
 
 const selectedRole = ref('admin')
 
-// const onPageLoad = async () => {
-//   const userData = await getCurrentUserApi();
-//   username.value = userData.username;
-// }
+const onPageLoad = async () => {
+  try {
+    const categories = await getAllCategoriesApi()
+    console.log(categories)
+  } catch (error) {
+    const errorMsg = handleAxiosError(error, 'Error fetching categories')
+    console.error(errorMsg)
+  }
+}
 </script>
 
 <template>

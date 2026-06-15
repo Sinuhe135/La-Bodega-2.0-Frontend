@@ -8,6 +8,12 @@ const links = ref<SideblockItem[]>([
     icon: 'material-symbols:account-circle',
     to: '/app',
   },
+  {
+    type: 'link',
+    label: 'Categories',
+    icon: 'material-symbols:topic',
+    to: '/app/categories',
+  },
 ])
 </script>
 

@@ -22,38 +22,40 @@ const selectedRole = ref('admin')
 </script>
 
 <template>
-  <VCard class="accounts-header">
+  
+  <div class="accounts-header">
+    <div id="category-container">
+      <VControl>
+        <VSelect v-model="selectedRole">
+          <option value="admin">Cuenta de la empresa que esta bien chida</option>
+          <option value="editor">Editor</option>
+          <option value="viewer">Viewer</option>
+        </VSelect>
+      </VControl>
+    </div>
 
-      <div id="category-container">
-        <VControl>
-          <VSelect v-model="selectedRole">
-            <option value="admin">Admin</option>
-            <option value="editor">Editor</option>
-            <option value="viewer">Viewer</option>
-          </VSelect>
-        </VControl>
-      </div>
+    <!-- <div id="search-container">
+    <VControl class="search-input">
+    <VInput placeholder="Search accounts..." />
+    </VControl>
+    <VIconButton color="primary" light outlined icon="material-symbols:search"/>
+    </div> -->
 
-      <div id="search-container">
-        <VControl class="search-input">
-          <VInput placeholder="Search accounts..." />
-        </VControl>
-        <VIconButton color="primary" light outlined icon="material-symbols:search"/>
-      </div>
-
-      <div id="new-container">
-        <VButton color="primary">New Account</VButton>
-      </div>
-    </VCard>
+    <div id="new-container">
+      <VIconButton color="primary" icon="material-symbols:add" outlined/>
+    </div>
+  </div>
 </template>
 
 <style lang="scss" scoped>
   .accounts-header {
     display: flex;
+    justify-content: space-between;
+    // flex-wrap: wrap-reverse;
     gap: 1rem;
 
     #category-container {
-      flex: 1;
+      // flex: 1;
     }
 
     #search-container {
@@ -68,7 +70,7 @@ const selectedRole = ref('admin')
     }
 
     #new-container {
-      flex: 1;
+      //flex: 1;
 
       display: flex;
       justify-content: center;

@@ -32,6 +32,7 @@ declare module 'vue' {
     NavsearchLayout: typeof import('./../src/components/layouts/navsearch/NavsearchLayout.vue')['default']
     NavsearchPageTitleMobile: typeof import('./../src/components/layouts/navsearch/NavsearchPageTitleMobile.vue')['default']
     NavsearchSubsidebarMobile: typeof import('./../src/components/layouts/navsearch/NavsearchSubsidebarMobile.vue')['default']
+    NewCategoryModal: typeof import('./../src/components/category/NewCategoryModal.vue')['default']
     PageContent: typeof import('./../src/components/layouts/shared/PageContent.vue')['default']
     PageContentWrapper: typeof import('./../src/components/layouts/shared/PageContentWrapper.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']

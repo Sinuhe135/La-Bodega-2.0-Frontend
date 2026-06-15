@@ -14,6 +14,8 @@ onMounted(() => {
 
 const selectedRole = ref('admin')
 
+const isNewCategoryModalOpen = ref(false)
+
 const onPageLoad = async () => {
   try {
     const categories = await getAllCategoriesApi()
@@ -23,14 +25,24 @@ const onPageLoad = async () => {
     console.error(errorMsg)
   }
 }
+
+const onCategoryCreated = () => {
+  onPageLoad()
+}
 </script>
 
 <template>
   
+  <NewCategoryModal
+    :open="isNewCategoryModalOpen"
+    @close="isNewCategoryModalOpen = false"
+    @created="onCategoryCreated"
+  />
+
   <div class="accounts-header">
 
     <div id="new-container">
-      <VIconButton color="primary" icon="material-symbols:add" outlined/>
+      <VIconButton color="primary" icon="material-symbols:add" outlined @click="isNewCategoryModalOpen = true"/>
     </div>
 
   </div>

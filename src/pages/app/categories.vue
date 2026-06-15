@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { GetAllCategoriesResponseDto } from '/@src/dtos/category/get_all_categories_response.dto'
 import { getAllCategoriesApi } from '/@src/repositories/category.repository'
 
 
@@ -7,19 +8,18 @@ onMounted(() => {
   pageTitle.value = 'Categories'
 })
 
+const isNewCategoryModalOpen = ref(false)
+
+const categories = ref<GetAllCategoriesResponseDto[]>([])
 
 onMounted(() => {
   onPageLoad()
 })
 
-const selectedRole = ref('admin')
-
-const isNewCategoryModalOpen = ref(false)
 
 const onPageLoad = async () => {
   try {
-    const categories = await getAllCategoriesApi()
-    console.log(categories)
+    categories.value = await getAllCategoriesApi()
   } catch (error) {
     const errorMsg = handleAxiosError(error, 'Error fetching categories')
     console.error(errorMsg)
@@ -27,6 +27,7 @@ const onPageLoad = async () => {
 }
 
 const onCategoryCreated = () => {
+//   categories.value = []
   onPageLoad()
 }
 </script>
@@ -46,6 +47,15 @@ const onCategoryCreated = () => {
     </div>
 
   </div>
+
+  <div class ="categories-list">
+    <CategoryElement
+      v-for="category in categories"
+      :key="category.id"
+      :id="category.id"
+      :category-name="category.name"
+    />
+  </div>
 </template>
 
 <style lang="scss" scoped>
@@ -53,11 +63,19 @@ const onCategoryCreated = () => {
     display: flex;
     justify-content: flex-end;
 
+    margin-bottom: 2rem;
+
     #new-container {
       //flex: 1;
 
       display: flex;
       justify-content: center;
     }
+  }
+
+  .categories-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
   }
 </style>

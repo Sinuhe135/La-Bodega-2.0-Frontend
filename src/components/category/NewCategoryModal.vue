@@ -62,7 +62,7 @@ const handleCreate = async () => {
         @submit.prevent="handleCreate"
       >
         <VField label="Name">
-          <VControl icon="lucide:tag" :loading="isLoading" :has-error="errorMessage !== ''">
+          <VControl :loading="isLoading" :has-error="errorMessage !== ''">
             <VInput
               v-model="name"
               type="text"

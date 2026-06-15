@@ -8,6 +8,7 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     AuthLayout: typeof import('./../src/components/layouts/auth/AuthLayout.vue')['default']
+    CategoryElement: typeof import('./../src/components/category/CategoryElement.vue')['default']
     ClientOnly: typeof import('./../src/components/ClientOnly.vue')['default']
     LandingFooter: typeof import('./../src/components/layouts/landing/LandingFooter.vue')['default']
     LandingGrids: typeof import('./../src/components/layouts/landing/LandingGrids.vue')['default']

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { GetAllCategoriesResponseDto } from '/@src/dtos/category/get_all_categories_response.dto'
 import { getAllCategoriesApi } from '/@src/repositories/category.repository'
 
 
@@ -6,21 +7,19 @@ const pageTitle = useVueroContext<string>('page-title')
 onMounted(() => {
   pageTitle.value = 'Accounts'
 })
-const userSessionStore = useUserSession()
 
-const username = ref('')
+const categories = ref<GetAllCategoriesResponseDto[]>()
 
 onMounted(() => {
-  username.value = userSessionStore.user?.username || ''
   onPageLoad()
 })
 
-const selectedRole = ref('admin')
+const selectedCategory = ref<number>()
 
 const onPageLoad = async () => {
   try {
-    const categories = await getAllCategoriesApi()
-    console.log(categories)
+    categories.value = await getAllCategoriesApi()
+    selectedCategory.value = categories.value[0]?.id
   } catch (error) {
     const errorMsg = handleAxiosError(error, 'Error fetching categories')
     console.error(errorMsg)
@@ -32,23 +31,17 @@ const onPageLoad = async () => {
   
   <div class="accounts-header">
     <div id="category-container">
-      <VControl>
-        <VSelect v-model="selectedRole">
-          <option value="admin">Cuenta de la empresa que esta bien chida</option>
-          <option value="editor">Editor</option>
-          <option value="viewer">Viewer</option>
+      <VControl v-if="categories && categories.length > 0" label="Category">
+        <VSelect v-model="selectedCategory">
+          <option v-for="category in categories" :key="category.id" :value="category.id">
+            {{ category.name }}
+          </option>
         </VSelect>
       </VControl>
+      <p v-else-if="categories && categories.length === 0">Please create a category first.</p>
     </div>
 
-    <!-- <div id="search-container">
-    <VControl class="search-input">
-    <VInput placeholder="Search accounts..." />
-    </VControl>
-    <VIconButton color="primary" light outlined icon="material-symbols:search"/>
-    </div> -->
-
-    <div id="new-container">
+    <div id="new-container" v-if="categories && categories.length > 0">
       <VIconButton color="primary" icon="material-symbols:add" outlined/>
     </div>
   </div>
@@ -63,6 +56,8 @@ const onPageLoad = async () => {
 
     #category-container {
       // flex: 1;
+      display: flex;
+      align-items: center;
     }
 
     #search-container {

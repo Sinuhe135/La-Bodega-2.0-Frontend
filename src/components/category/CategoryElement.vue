@@ -9,6 +9,17 @@ defineProps<CategoryElementProps>()
 
 <template>
   <VCard>
-    {{ categoryName }}
+    <div class="data-row">
+      <span>Category name:</span>
+      <p>{{ categoryName }}</p>
+    </div>
   </VCard>
 </template>
+
+<style lang="scss" scoped>
+  .data-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+</style>

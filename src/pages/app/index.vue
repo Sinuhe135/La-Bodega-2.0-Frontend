@@ -24,7 +24,7 @@ onMounted(() => {
 
 const selectedCategory = ref<number>()
 const currentPage = ref<number>(1)
-const itemsPerPage = 10
+const itemsPerPage = 4
 
 const onPageLoad = async () => {
   await getCategories()
@@ -108,6 +108,7 @@ const onCategorySelected = async () => {
 
   accountsData.value = undefined
   accountsDecrypted.value = undefined
+  currentPage.value = 1
   await getAccounts(selectedCategory.value)
   await decryptAccounts()
 }
@@ -121,6 +122,8 @@ const onAccountCreated = async () => {
 
 const onPageChanged = async (newPage: number) => {
   console.log('Page changed to:', newPage)
+  if(newPage === currentPage.value) return
+
   currentPage.value = newPage
 
   if (!selectedCategory.value) return
@@ -172,8 +175,12 @@ const onPageChanged = async (newPage: number) => {
     />
   </div>
 
+  <VCard v-if="accountsData && accountsData.data.length === 0" class="no-accounts">
+    No accounts found
+  </VCard>
+
   <VFlexPagination
-    v-if="accountsData && accountsData.data"
+    v-if="accountsData && accountsData.data.length > 0"
     :total-items="accountsData.totalItems"
     :item-per-page="accountsData.limit"
     :current-page="accountsData.page"
@@ -221,5 +228,10 @@ const onPageChanged = async (newPage: number) => {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+  }
+
+  .no-accounts {
+    text-align: center;
+    font-size: 1.2rem;
   }
 </style>

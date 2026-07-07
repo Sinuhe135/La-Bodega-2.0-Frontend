@@ -10,7 +10,7 @@ onMounted(() => {
 
 const isNewCategoryModalOpen = ref(false)
 
-const categories = ref<GetAllCategoriesResponseDto[]>([])
+const categories = ref<GetAllCategoriesResponseDto[]>()
 
 onMounted(() => {
   onPageLoad()
@@ -56,6 +56,10 @@ const onCategoryCreated = () => {
       :category-name="category.name"
     />
   </div>
+
+  <VCard v-if="categories && categories.length === 0" class="no-accounts">
+    No categories found
+  </VCard>
 </template>
 
 <style lang="scss" scoped>
@@ -77,5 +81,10 @@ const onCategoryCreated = () => {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+  }
+
+  .no-accounts {
+    text-align: center;
+    font-size: 1.2rem;
   }
 </style>

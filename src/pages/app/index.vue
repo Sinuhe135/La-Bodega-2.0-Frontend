@@ -64,6 +64,7 @@ const decryptAccounts = async () => {
     accountsData.value.data.map(async (account) => {
       let decryptedEmail = ''
       try {
+        // hacer estos a la vez también
         decryptedEmail = await decrypt(account.email, cryptKey)
       } catch (error) {
         decryptedEmail = 'Decryption failed'

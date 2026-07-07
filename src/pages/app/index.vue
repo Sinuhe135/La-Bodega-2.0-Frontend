@@ -23,6 +23,8 @@ onMounted(() => {
 })
 
 const selectedCategory = ref<number>()
+const currentPage = ref<number>(1)
+const itemsPerPage = 10
 
 const onPageLoad = async () => {
   await getCategories()
@@ -44,7 +46,7 @@ const getCategories = async () => {
 
 const getAccounts = async (categoryId: number) => {
   try {
-    accountsData.value = await getAllAccountsByCategoryApi(categoryId, 10, 1)
+    accountsData.value = await getAllAccountsByCategoryApi(categoryId, itemsPerPage, currentPage.value)
   } catch (error) {
     const errorMsg = handleAxiosError(error, 'Error fetching accounts')
     console.error(errorMsg)
@@ -117,6 +119,17 @@ const onAccountCreated = async () => {
   await decryptAccounts()
 }
 
+const onPageChanged = async (newPage: number) => {
+  console.log('Page changed to:', newPage)
+  currentPage.value = newPage
+
+  if (!selectedCategory.value) return
+  accountsData.value = undefined
+  accountsDecrypted.value = undefined
+  await getAccounts(selectedCategory.value)
+  await decryptAccounts()
+}
+
 </script>
 
 <template>
@@ -158,6 +171,16 @@ const onAccountCreated = async () => {
       :platform="account.platform"
     />
   </div>
+
+  <VFlexPagination
+    v-if="accountsData && accountsData.data"
+    :total-items="accountsData.totalItems"
+    :item-per-page="accountsData.limit"
+    :current-page="accountsData.page"
+    :no-router="true"
+    @update:current-page="onPageChanged"
+  />
+
 </template>
 
 <style lang="scss" scoped>

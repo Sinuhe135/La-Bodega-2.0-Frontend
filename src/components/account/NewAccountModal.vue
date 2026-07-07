@@ -13,6 +13,8 @@ const props = defineProps<{
 
 const emit = defineEmits<NewAccountModalEmits>()
 
+const cryptKey = useUserCryptKey()
+
 const name = ref('')
 const username = ref('')
 const email = ref('')
@@ -44,8 +46,27 @@ const handleCreate = async () => {
 
   isLoading.value = true
 
+  
   try {
-    await createAccountApi(props.categoryId, email.value, name.value, password.value, platform.value, username.value)
+    if(!cryptKey.value) {
+      throw new Error('Cryptographic key is not available')
+    }
+
+    const [encryptedEmail, encryptedPassword, encryptedPlatform, encryptedUsername] = await Promise.all([
+      encrypt(email.value, cryptKey.value),
+      encrypt(password.value, cryptKey.value),
+      encrypt(platform.value, cryptKey.value),
+      encrypt(username.value, cryptKey.value),
+    ])
+
+    await createAccountApi(
+      props.categoryId,
+      name.value,
+      encryptedEmail,
+      encryptedPassword,
+      encryptedPlatform,
+      encryptedUsername,
+    )
     resetForm()
     emit('created')
     emit('close')

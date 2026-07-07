@@ -19,20 +19,24 @@ export async function getAllAccountsByCategoryApi(categoryId: number, limit: num
         params: paginationQuery,
     });
 
+    console.log('getAllAccountsByCategoryApi response', response.data)
+
     return response.data;
 }
 
-export async function createAccountApi(categoryId: number, email: string, name: string, password: string, platform: string, username: string) : Promise<CreateCategoryResponseDto> {
+export async function createAccountApi(categoryId: number, name: string, email: string, password: string, platform: string, username: string) : Promise<CreateCategoryResponseDto> {
     const token = useUserToken().value
 
     const createAccountDto: CreateAccountDto = {
         categoryId: categoryId,
-        email: email,
         name: name,
+        email: email,
         password: password,
         platform: platform,
         username: username,
     }
+
+    console.log('createAccountDto', createAccountDto)
 
     const response = await apiClient.post('/account', createAccountDto, {
         headers: {

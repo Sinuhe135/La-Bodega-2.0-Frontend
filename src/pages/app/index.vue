@@ -15,7 +15,8 @@ onMounted(() => {
 const isNewAccountyModalOpen = ref(false)
 
 const categories = ref<GetAllCategoriesResponseDto[]>()
-const accounts = ref<PaginatedResult<GetAllAccountsResponseDto>>()
+const accountsData = ref<PaginatedResult<GetAllAccountsResponseDto>>()
+const accountsDecrypted = ref<GetAllAccountsResponseDto[]>()
 
 onMounted(() => {
   onPageLoad()
@@ -27,7 +28,8 @@ const onPageLoad = async () => {
   await getCategories()
   selectedCategory.value = categories.value && categories.value.length > 0 ? categories.value[0].id : undefined
   if(selectedCategory.value){
-    getAccounts(selectedCategory.value)
+    await getAccounts(selectedCategory.value)
+    await decryptAccounts()
   }
 }
 
@@ -42,24 +44,76 @@ const getCategories = async () => {
 
 const getAccounts = async (categoryId: number) => {
   try {
-    accounts.value = await getAllAccountsByCategoryApi(categoryId, 10, 1)
+    accountsData.value = await getAllAccountsByCategoryApi(categoryId, 10, 1)
   } catch (error) {
     const errorMsg = handleAxiosError(error, 'Error fetching accounts')
     console.error(errorMsg)
   }
 }
 
+const decryptAccounts = async () => {
+  if (!accountsData.value || !accountsData.value.data) return
+
+  const cryptKey = useUserCryptKey().value
+  if (!cryptKey) {
+    console.error('Cryptographic key is not available')
+    return
+  }
+
+  accountsDecrypted.value = await Promise.all(
+    accountsData.value.data.map(async (account) => {
+      let decryptedEmail = ''
+      try {
+        decryptedEmail = await decrypt(account.email, cryptKey)
+      } catch (error) {
+        decryptedEmail = 'Decryption failed'
+      }
+      let decryptedPassword = ''
+      try {
+        decryptedPassword = await decrypt(account.password, cryptKey)
+      } catch (error) {
+        decryptedPassword = 'Decryption failed'
+      }
+
+      let decryptedPlatform = ''
+      try {
+        decryptedPlatform = await decrypt(account.platform, cryptKey)
+      } catch (error) {
+        decryptedPlatform = 'Decryption failed'
+      }
+
+      let decryptedUsername = ''
+      try {
+        decryptedUsername = await decrypt(account.username, cryptKey)
+      } catch (error) {
+        decryptedUsername = 'Decryption failed'
+      }
+
+      return {
+        ...account,
+        email: decryptedEmail,
+        password: decryptedPassword,
+        platform: decryptedPlatform,
+        username: decryptedUsername,
+      }
+    })
+  )
+}
+
 const onCategorySelected = async () => {
   if (!selectedCategory.value) return
 
-  accounts.value = undefined
+  accountsData.value = undefined
+  accountsDecrypted.value = undefined
   await getAccounts(selectedCategory.value)
+  await decryptAccounts()
 }
 
-const onAccountCreated = () => {
+const onAccountCreated = async () => {
   if (!selectedCategory.value) return
 
-  getAccounts(selectedCategory.value)
+  await getAccounts(selectedCategory.value)
+  await decryptAccounts()
 }
 
 </script>
@@ -93,7 +147,7 @@ const onAccountCreated = () => {
 
   <div id="account-list">
     <AccountElement
-      v-for="account in accounts?.data"
+      v-for="account in accountsDecrypted"
       :key="account.id"
       :id="account.id"
       :name="account.name"
